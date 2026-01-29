@@ -8,7 +8,7 @@ library(cv)
 library(performance)
 
 #Read in modeling data frames
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/")
 BR_points_l <- st_read("BR_points_final.gpkg")
 LR_points_l <- st_read("LR_points_final.gpkg")
 NM_points_l <- st_read("NM_points_final.gpkg")

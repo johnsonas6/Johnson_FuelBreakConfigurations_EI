@@ -2,17 +2,21 @@ library(terra)
 library(sf)
 library(tidyverse)
 
-#Import fuel models for masking
-setwd("C:\\Users\\swanj\\Documents\\Research\\fuel_break_systems\\Flammap\\")
-brfm <- rast("BR_data/BR_inputs/boundaryridge.tif", lyrs = 4)
-lrfm <- rast("LR_data/LR_inputs/limestoneridge/limestoneridge/limestoneridge.tif", lyrs = 4)
+##CREATE CFL AND BP RASTERS
+
+#Import fuel models to mask out unburnable rasters
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Flammap/")
+
+#Import fuel models
+brfm <- rast("BR_data/BR_inputs/boundaryridge/boundaryridge.tif", lyrs = 4)
+lrfm <- rast("LR_data/LR_inputs/limestoneridge/limestoneridge.tif", lyrs = 4)
 mlfm <- rast("ML_data/ML_inputs/mtlowe/mtlowe.tif", lyrs = 4)
 nmfm <- rast("NM_data/NM_inputs/northmt/northmt.tif", lyrs = 4)
-brfm_in <- rast("BR_data/BR_inputs/BoundaryRidge_Ind/BoundaryRidge_Ind_GR1.tif", lyrs = 4)
-brfm_fi <- rast("BR_data/BR_inputs/BoundaryRidge_Firing/BoundaryRidge_Firing_GR1.tif", lyrs = 4)
-lrfm_in <- rast("LR_data/LR_inputs/limestoneridge/LimestoneRidge_Ind_GR1/LimestoneRidge_Ind_GR1.tif"
+brfm_in <- rast("BR_data/BR_inputs/BoundaryRidge_Ind_GR1/BoundaryRidge_Ind_GR1.tif", lyrs = 4)
+brfm_fi <- rast("BR_data/BR_inputs/BoundaryRidge_Firing_GR1//BoundaryRidge_Firing_GR1.tif", lyrs = 4)
+lrfm_in <- rast("LR_data/LR_inputs/LimestoneRidge_Ind_GR1/LimestoneRidge_Ind_GR1.tif"
                 , lyrs = 4)
-lrfm_fi <- rast("LR_data/LR_inputs/limestoneridge/LimestoneRidge_Firing_GR1/LimestoneRidge_Firing_GR1.tif",
+lrfm_fi <- rast("LR_data/LR_inputs/LimestoneRidge_Firing_GR1/LimestoneRidge_Firing_GR1.tif",
                 lyrs = 4)
 mlfm_in <- rast("ML_data/ML_inputs/Mtlowe_Ind_GR1/Mtlowe_Ind_GR1.tif", lyrs = 4)
 mlfm_fi <- rast("ML_data/ML_inputs/Mtlowe_Firing_GR1/Mtlowe_Firing_GR1.tif", lyrs = 4)
@@ -21,7 +25,7 @@ nmfm_fi <- rast("NM_data/NM_inputs/Northmt_Firing_GR1/Northmt_Firing_GR1.tif", l
 
 #Create CFL Rasters
 make_CFL_rasters <- function(x){
-  setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/Hazard_rasters/")
+  setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Flammap/FLP_files/")
   #ReadCSV
   df <- read.csv(x)
   #Create CFL Column, rename columns to intervals
@@ -89,7 +93,7 @@ make_CFL_rasters <- function(x){
   names(b) <- "CFL"
   
   #Set wd for saving rasters
-  setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/CFL/")
+  setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/raster/CFL/")
   
   #Saving rasters and assignting to the environment
   terra::writeRaster(b, filename=paste0(substr(x, 1, 6), "CFL.tif"), 
@@ -97,13 +101,12 @@ make_CFL_rasters <- function(x){
 }
 
 #Run function on all FLP csvs
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/Hazard_rasters/")
-FLP_csvs <- list.files(pattern = "FLPm")
+FLP_csvs <- list.files(path = "C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Flammap/FLP_files/", pattern = ".csv")
 lapply(FLP_csvs, make_CFL_rasters)
 
 #Create BP Rasters
 make_BP_rasters <- function(x){
-  setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/Hazard_rasters/")
+  setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Flammap/FLP_files/")
   #ReadCSV
   df <- read.csv(x)
   #Create CFL Column, rename columns to intervals
@@ -158,7 +161,7 @@ make_BP_rasters <- function(x){
   names(b) <- "Burn_Probability"
   
   #Set wd for saving rasters
-  setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/BP/")
+  setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/raster/BP/")
   
   #Saving rasters and assignting to the environment
   terra::writeRaster(b, filename=paste0(substr(x, 1, 6), "BP.tif"), 
@@ -166,6 +169,5 @@ make_BP_rasters <- function(x){
 }
 
 #Run function on all FLP csvs
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/Hazard_rasters/")
-FLP_csvs <- list.files(pattern = "FLPm")
+FLP_csvs <- list.files(path = "C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Flammap/FLP_files/", pattern = ".csv")
 lapply(FLP_csvs, make_BP_rasters)

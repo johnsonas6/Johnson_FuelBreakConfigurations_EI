@@ -1,9 +1,32 @@
 library(terra)
 library(gtools)
 
+
 ##Create Uncontrollable Wildfire Risk rasters
 
-#WEIGHTS FIGURE
+#Import fuel model inputs to mask out unburnable fuel models
+
+#Set directory with fuel models
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Flammap/")
+
+#Import fuel models
+brfm <- rast("BR_data/BR_inputs/boundaryridge/boundaryridge.tif", lyrs = 4)
+lrfm <- rast("LR_data/LR_inputs/limestoneridge/limestoneridge.tif", lyrs = 4)
+mlfm <- rast("ML_data/ML_inputs/mtlowe/mtlowe.tif", lyrs = 4)
+nmfm <- rast("NM_data/NM_inputs/northmt/northmt.tif", lyrs = 4)
+brfm_in <- rast("BR_data/BR_inputs/BoundaryRidge_Ind_GR1/BoundaryRidge_Ind_GR1.tif", lyrs = 4)
+brfm_fi <- rast("BR_data/BR_inputs/BoundaryRidge_Firing_GR1//BoundaryRidge_Firing_GR1.tif", lyrs = 4)
+lrfm_in <- rast("LR_data/LR_inputs/LimestoneRidge_Ind_GR1/LimestoneRidge_Ind_GR1.tif"
+                , lyrs = 4)
+lrfm_fi <- rast("LR_data/LR_inputs/LimestoneRidge_Firing_GR1/LimestoneRidge_Firing_GR1.tif",
+                lyrs = 4)
+mlfm_in <- rast("ML_data/ML_inputs/Mtlowe_Ind_GR1/Mtlowe_Ind_GR1.tif", lyrs = 4)
+mlfm_fi <- rast("ML_data/ML_inputs/Mtlowe_Firing_GR1/Mtlowe_Firing_GR1.tif", lyrs = 4)
+nmfm_in <- rast("NM_data/NM_inputs/Northmt_Ind_GR1/Northmt_Ind_GR1.tif", lyrs = 4)
+nmfm_fi <- rast("NM_data/NM_inputs/Northmt_Firing_GR1/Northmt_Firing_GR1.tif", lyrs = 4)
+
+##Calculate Hazard Weights
+
 #Plotting breakpoints of suppression effectiveness
 #X is flame lengths or fireline intensity
 #Byram's equation is FL in meters = 0.0775*FLI(KW/m) ^ 0.46
@@ -51,7 +74,7 @@ predicted_weights <- data.frame(FIL, weights)
 #Function to create weighted CFL rasters by including weight derived from a population model (above)
 #and with each FIL multiplied by burn likelihood at each cell
 make_UWR_rasters <- function(x){
-  setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/Hazard_rasters/")
+  setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Flammap/FLP_files/")
   #ReadCSV
   df <- read.csv(x)
   #Create CFL Column, rename columns to intervals
@@ -132,7 +155,7 @@ make_UWR_rasters <- function(x){
   names(b) <- "UWR"
   
   #Set wd for saving rasters
-  setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/withconstant/")
+  setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/raster/UWR/")
   
   #Changing file name inconsistency for firing landscapes
   forpaste <- ifelse(substr(x,4,5) == "FR", paste0(substr(x,1,3), "FI_"), substr(x,1,6))
@@ -144,8 +167,7 @@ make_UWR_rasters <- function(x){
 }
 
 #Run function on all FLP csvs
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/Hazard_rasters/")
-UWR_csvs <- list.files(pattern = ".csv")
+UWR_csvs <- list.files(path = "C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Flammap/FLP_files/", pattern = ".csv")
 lapply(UWR_csvs, make_UWR_rasters)
 
 #Clear environment
