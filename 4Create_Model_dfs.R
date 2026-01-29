@@ -9,10 +9,10 @@ library(MuMIn)
 ##Point sampling with crs of original rasters from UWR
 #make list of firing rasters to plug into function
 
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/UWR_subsampled/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/raster/UWR/")
 
 #Get list of firing landscapes for sampling
-sampling_tifs <- list.files(pattern = "FI_hazard.tif")
+sampling_tifs <- list.files(pattern = "FI_UWR.tif")
 
 sampling_tifs <-  sampling_tifs[!grepl(x = sampling_tifs, pattern = "xml")]
 
@@ -51,7 +51,7 @@ point_samples <- lapply(sampling_tifs, function(file_path) {
   b <- grid_sf$geometry
   
   # Create the output file path
-  output_path <- paste0("C:\\Users\\swanj\\Documents\\Research\\fuel_break_systems\\Spatialdata\\CFL_BP_rasters\\UWR_subsampled\\", 
+  output_path <- paste0("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/", 
                         paste0(substr(file_path,1,2), "_point_samples.shp"))
   
   # Write the sampled points to a shapefile
@@ -60,7 +60,7 @@ point_samples <- lapply(sampling_tifs, function(file_path) {
 
 rm(point_samples)
 
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/UWR_subsampled/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/")
 
 BR_points <- st_read("BR_point_samples.shp")
 LR_points <- st_read("LR_point_samples.shp")
@@ -75,7 +75,7 @@ ML_points$landscape <- "ML"
 
 #Function to use points to sample UWR rasters
 sample_raster <- function(x) {
-  setwd("C://Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/UWR_subsampled/")
+  setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/raster/")
   
   r <- rast(x)
   
@@ -143,7 +143,7 @@ sample_raster <- function(x) {
 }
 
 
-setwd("C://Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/UWR_subsampled/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/raster/")
 
 raster_list <- list.files(pattern = ".tif")
 
@@ -152,7 +152,7 @@ raster_list <- raster_list[!grepl(x = raster_list, pattern = "xml")]
 lapply(raster_list, sample_raster)
 
 ##SAMPLE FUEL MODEL AND SLOPE
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Flammap/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Flammap/")
 
 LR_UT_FM <- rast("LR_data/LR_inputs/limestoneridge/limestoneridge/limestoneridge.tif", lyr = 4)
 LR_FB_FM <- rast("LR_data/LR_inputs/limestoneridge/LimestoneRidge_FB_GR1/LimestoneRidge_FB_GR1.tif", lyr = 4)
@@ -255,7 +255,7 @@ master_points <- rbind(BR_points_t, LR_points_t, ML_points_t, NM_points_t)
 rm(list = ls()[!grepl("master_points", ls())])
 
 #read in master polygon files
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/sf_for_distance/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Fuelbreak_polygons/")
 master_fi_polygons <- st_read("master_fi_merged_best.shp")
 master_fb_polygons <- st_read("master_fb_polygons.shp")
 
@@ -312,7 +312,7 @@ master_points$fb_az <- fb_azimuths
 master_points$fi_az <- fi_azimuths
 
 #Save udated points df
-path <- "C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/UWR_subsampled/"
+path <- "C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/"
 
 st_write(master_points, dsn = paste0(path, "master_points_az.shp"), overwrite = TRUE, append = FALSE)
 
@@ -332,7 +332,7 @@ master_points <- master_points %>% mutate(wnd_fb = case_when(
 
 master_points <- master_points %>% select(-c(nearest_idx_fb, nearest_idx_fi))
 
-st_write(obj = master_points, dsn = "C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/UWR_subsampled/master_points_haz.shp", 
+st_write(obj = master_points, dsn = "C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/master_points_haz.shp", 
          overwrite = TRUE, append = FALSE)
 
 #Function to calculate distance from poing to treatment
@@ -351,7 +351,7 @@ calculate_distance <- function(master_points) {
 
 calculate_distance(master_points)
 
-st_write(obj = master_points, dsn = "C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/UWR_subsampled/master_points_haz.shp", 
+st_write(obj = master_points, dsn = "C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/master_points_haz.shp", 
          overwrite = TRUE, append = FALSE)
 
 #Disaggregate all fb polygons
@@ -490,7 +490,7 @@ compute_polygon_width_segments <- function(polygon) {
     output_name <- paste0(polygon$landscape[i], fborfi, polygon$FID[i])
     
     # Save the results
-    output_path <- paste0("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/UWR_subsampled/spatial_check/", output_name, ".shp")
+    output_path <- paste0("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/", output_name, ".shp")
     
     if (all(is.na(width_vect))) {
       message("All widths are NA for polygon ", i, ". Skipping file writing.")
@@ -521,7 +521,7 @@ master_fiwidth_points <- rbind(lrfb_fiwidths_1, nmfb_fiwidths_2, nmfb_fiwidths_3
 master_fiwidth_points <- master_fiwidth_points %>% filter(width > 2, width < 800)
 master_fbwidth_points <- master_fbwidth_points %>% filter(width > 2, width < 800)
 
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/UWR_subsampled")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/")
 
 st_write(master_fbwidth_points, dsn = "master_fbwidth_points.shp", overwrite = TRUE, append = FALSE)
 st_write(master_fiwidth_points, dsn = "master_fiwidth_points.shp", overwrite = TRUE, append = FALSE)
@@ -545,11 +545,11 @@ if (!is.null(master_fiwidth_points$width)) {
 
 master_points <- master_points %>% select(-c(fb_width_idx, fi_width_idx, fi_az, fb_az))
 
-setwd('C:/Users/swanj/Documents/Research/Fuel_Breaks/Fuel_Break_Spatial_Analysis/arc_fb_analysis/NED_data/')
+setwd('C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/DEMs/')
 TPI <- rast("9by9TPI.tif")
 st_set_crs(master_points, crs(TPI))
 TPI_class <- rast("TPI_9class_2.tif")
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/sf_for_distance/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Fuelbreak_polygons/")
 master_fi_polygons <- st_read("master_fi_merged_best.shp")
 master_fb_polygons <- st_read("master_fb_polygons.shp")
 
@@ -592,7 +592,7 @@ for (i in 1:nrow(master_points)) {
 master_points$fb_TPI <- fb_TPI
 master_points$fi_TPI <- fi_TPI
 
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/UWR_subsampled/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/")
 
 st_write(obj = master_points, dsn = "master_points_haz.shp", overwrite = TRUE, append = FALSE)
 
@@ -709,7 +709,7 @@ proximity_index <- function(polygon, polygon_name) {
     output_name_prox <- paste0(as.character(polygon$landscape[i]), fborfi_prox, as.character(polygon$FID[i]))
     
     # Define output path
-    output_path_prox <- paste0("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/UWR_subsampled/spatial_check/", output_name_prox, ".shp")
+    output_path_prox <- paste0("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/", output_name_prox, ".shp")
     
     # Save results
     if (!all(is.na(proximity_index_vect))) {
@@ -893,7 +893,7 @@ compute_sinuosity_and_artrtd <- function(polygon) {
     output_name_sinu <- paste0(polygon$landscape[i], fborfi_sinu, polygon$FID[i])
     
     # Save the results
-    output_path_sinu <- paste0("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/UWR_subsampled/spatial_check/", 
+    output_path_sinu <- paste0("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/", 
                                output_name_sinu, ".shp")
     
     if (all(is.na(sinuosity_vect))) {
@@ -910,7 +910,7 @@ compute_sinuosity_and_artrtd <- function(polygon) {
     output_name_at <- paste0(polygon$landscape[i], fborfi_at, polygon$FID[i])
     
     # Save the results
-    output_path_at <- paste0("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/UWR_subsampled/spatial_check/", 
+    output_path_at <- paste0("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/", 
                              output_name_at, ".shp")
     
     
@@ -986,7 +986,7 @@ if (!is.null(master_fiat_points$area_treated)) {
 
 rm(list = ls()[!grepl("master_points", ls())])
 
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/UWR_subsampled/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/")
 
 st_write(obj = master_points, dsn = "master_points_haz.shp", overwrite = TRUE, append = FALSE)
 
@@ -1025,7 +1025,7 @@ master_points_longer <- master_points %>%
   ungroup()
 
 #Save new master points and master_points_longer in final edits folder
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/")
 
 st_write(master_points_longer, "master_points_longer.gpkg", append = FALSE)
 
@@ -1097,7 +1097,7 @@ ML_points_l <- master_points_longer  %>%
                           levels = c("GR", "GS", "SH", "TU", "TL")))
 
 #Save dfs
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/")
 st_write(BR_points_l, "BR_points_final.gpkg")
 st_write(LR_points_l, "LR_points_final.gpkg", append = FALSE)
 st_write(NM_points_l, "NM_points_final.gpkg")

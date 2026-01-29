@@ -6,17 +6,17 @@ library(terra)
 
 ##Paper figures
 #Make UWR vs BP and CFL heatmap
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/BP/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/raster/BP/")
 
 #Get raster file names
 BP_list <- list.files(pattern = "UT")
 BP_list <- BP_list[!grepl("xml", BP_list)]
 
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/CFL/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/raster/CFL/")
 CFL_list <- list.files(pattern = "UT")
 CFL_list <- CFL_list[!grepl("xml", CFL_list)]
 
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/withconstant/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/raster/UWR/")
 UWR_list <- list.files(pattern = "UT")
 UWR_list <- UWR_list[!grepl("xml", UWR_list)]
 
@@ -25,17 +25,17 @@ raster_list <- c(BP_list, CFL_list, UWR_list)
 #Import rasters
 lapply(raster_list, function(x) {
   if (str_detect(x, "CFL")) {
-    setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/CFL/")
+    setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/raster/CFL/")
     r <- rast(x)
     assign(substr(x,1,9), r, envir = .GlobalEnv)
   }
   else if (str_detect(x, "BP")) {
-    setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/BP/")
+    setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/raster/BP/")
     r <- rast(x)
     assign(substr(x,1,8), r, envir = .GlobalEnv)
   }
   else {
-    setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/withconstant/")
+    setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/raster/UWR/")
     r <- rast(x)
     assign(substr(x,1,9), r, envir = .GlobalEnv)
   }
@@ -43,7 +43,7 @@ lapply(raster_list, function(x) {
 
 
 #Make data frame with column for landscape name/trtmnt, BP, CFL, and hazard
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/UWR_subsampled/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/")
 
 BR_points <- st_read("BR_point_samples.shp") %>%
   select(-FID) %>%
@@ -202,7 +202,7 @@ cfl_bp_haz_hm <- ggplot(data = points_hm,
                                     angle = 90)) +
   labs(x = "Conditional Flame Length (m)", y = "Burn Probability")
 
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Figures/Final_figures/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/figures/")
 ggsave(plot = cfl_bp_haz_hm, filename = "UWR_heatmap_Forpaper.png", 
        width = 10, height = 6, 
        dpi = 300)
@@ -281,20 +281,18 @@ weight_plot <- data %>%
     plot.background = element_rect(fill = "white", color = NA)
   )
 
-ggsave(weight_plot, filename = "C:/Users/swanj/Documents/Research/fuel_break_systems/Figures/Final_figures/weight_plot.png", 
+ggsave(weight_plot, filename = "C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/figures/weight_plot.png", 
        width = 10, height = 6, dpi = 300)
 
 #Distance panel figure
 
 #Upload point sfs
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/data_frames/")
 
 BR_points_l <- st_read("BR_points_final.gpkg")
 LR_points_l <- st_read("LR_points_final.gpkg")
 ML_points_l <- st_read("ML_points_final.gpkg")
 NM_points_l <- st_read("NM_points_final.gpkg")
-
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/")
 
 #Unscale logdis and wnd
 master_points_longer <- st_read("master_points_longer.gpkg") %>%
@@ -426,7 +424,7 @@ distance_graph_lim_realdis <- master_points_graph_dislim %>%
         legend.position = c(1.13, 0.5), 
         plot.margin = margin(50, 120, 10, 10, unit = "pt"))
 
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Figures/Final_figures/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/figures/")
 ggsave("distance_graph.png", distance_graph_lim_realdis, width = 9, height = 10)
 
 #Make Boundary Ridge wind and distance heat map
@@ -519,7 +517,7 @@ BRwnddis_hm <- BRpoints_winddishm %>%
                                     angle = 90)) +
   labs(x = "Distance (km)", y = "Wind Alignment")
 
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Figures/Final_figures/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/figures/")
 ggsave(plot = BRwnddis_hm, filename = "BR_wnddis_hm.png", 
        width = 15, height = 6, 
        dpi = 300)
@@ -527,7 +525,7 @@ ggsave(plot = BRwnddis_hm, filename = "BR_wnddis_hm.png",
 ##SI Figures
 
 #Make graphs for UWR vs BP and CFL
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/withconstant/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/raster/")
 
 #Read in tifs
 UWR_files <- list.files(pattern = "UT_hazard")
@@ -568,7 +566,7 @@ lapply(UWR_files, function(file_path) {
 
 ##Making new BP and CFL rasters so I don't have to reproject
 
-setwd("C:\\Users\\swanj\\Documents\\Research\\fuel_break_systems\\Flammap\\")
+setwd("C:\\Users\\swanj\\Documents\\Johnsonetal2026_FuelBreaks_UWR\\Flammap\\")
 brfm <- rast("BR_data/BR_inputs/boundaryridge.tif", lyrs = 4)
 lrfm <- rast("LR_data/LR_inputs/limestoneridge/limestoneridge/limestoneridge.tif", lyrs = 4)
 mlfm <- rast("ML_data/ML_inputs/mtlowe/mtlowe.tif", lyrs = 4)
@@ -576,7 +574,7 @@ nmfm <- rast("NM_data/NM_inputs/northmt/northmt.tif", lyrs = 4)
 
 
 make_CFL_rasters <- function(x){
-  setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/Hazard_rasters/")
+  setwd("C:\\Users\\swanj\\Documents\\Johnsonetal2026_FuelBreaks_UWR\\Flammap\\FLP_files\\")
   #ReadCSV
   df <- read.csv(x)
   #Create CFL Column, rename columns to intervals
@@ -653,22 +651,17 @@ make_CFL_rasters <- function(x){
   
   points <- inner_join(points, values, by = join_by("ID"))
   
-  #Set wd for saving rasters
-  setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/CFL/")
   
-  #Saving rasters and assignting to the environment
-  terra::writeRaster(b, filename=paste0(substr(x, 1, 6), "CFL.tif"), 
-                     overwrite=TRUE)
   assign(paste0(substr(x, 1, 6), "CFL.tif"), b, envir = .GlobalEnv)
   assign(points_envir, points, envir = .GlobalEnv)
 }
 
 #Run function on all FLP csvs
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/Hazard_rasters/")
+setwd("C:\\Users\\swanj\\Documents\\Johnsonetal2026_FuelBreaks_UWR\\Flammap\\FLP_files\\")
 UWR_csvs <- list.files(pattern = "UT_FLPm")
 lapply(UWR_csvs, make_CFL_rasters)
 
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/")
+setwd("C:\\Users\\swanj\\Documents\\Johnsonetal2026_FuelBreaks_UWR\\Flammap\\FLP_files\\")
 BP_rast <- list.files(pattern = "UT_BP")
 BP_rast <- BP_rast[!grepl("xml", BP_rast)]
 lapply(BP_rast, function(x) {

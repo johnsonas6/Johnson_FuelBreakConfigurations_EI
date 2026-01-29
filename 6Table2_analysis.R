@@ -2,7 +2,7 @@ library(tidyverse)
 library(sf)
 
 #Read in UWR rasters to create summary metrics
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/CFL_BP_rasters/JohnsEdits_Final/withconstant/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/raster/")
 
 #Read in tifs
 UWR_files <- list.files(pattern = ".tif")
@@ -12,7 +12,7 @@ lapply(UWR_files, function(x) {
 })
 
 #read in master fb and fi polygons
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/sf_for_distance/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Fuelbreak_polygons/")
 
 master_fi_polygons_dis <- st_read("master_fi_merged_best.shp")
 master_fb_polygons_dis <- st_read("master_fb_poly_dis.shp")
@@ -77,11 +77,11 @@ percent_treateddf <- percent_treateddf %>%
          normfimetric = as.numeric(lscparea) / as.numeric(fiarea))
 
 #save table
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Figures")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/tables/")
 write.csv(percent_treateddf, "percent_treated_table.csv")
 
 #Read in fire size lists
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Spatialdata/Fire_sizelist")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Flammap/FireSize_lists/")
 
 perimeter_files <- list.files(pattern = '.csv')
 
@@ -228,7 +228,7 @@ df <- df %>% group_by(landscape, treatment) %>%
     norm_difference = differenced * norm_metric,
     perc_change = (differenced / untreated_hazard)*100)
 
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Figures")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/tables/")
 write.csv(df, "DescriptiveStats_Table_Forpaper.csv", append = FALSE)
 
 ##total area burned
@@ -394,7 +394,7 @@ imap(fi_list, function(x, i) {
   #Save to CSV
   write.csv(
     combined_result,
-    file = paste0("C:/Users/swanj/Documents/Research/fuel_break_systems/Figures/",
+    file = paste0("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/tables/",
                   i, "_firechange_combined.csv"),
     row.names = FALSE,
     append = FALSE

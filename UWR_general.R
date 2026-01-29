@@ -1,29 +1,15 @@
-library(terra)
-library(gtools)
-
-
 ##Create Uncontrollable Wildfire Risk rasters
 
 #Import fuel model inputs to mask out unburnable fuel models
 
 #Set directory with fuel models
-setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Flammap/")
+setwd("")
 
-#Import fuel models
-brfm <- rast("BR_data/BR_inputs/boundaryridge/boundaryridge.tif", lyrs = 4)
-lrfm <- rast("LR_data/LR_inputs/limestoneridge/limestoneridge.tif", lyrs = 4)
-mlfm <- rast("ML_data/ML_inputs/mtlowe/mtlowe.tif", lyrs = 4)
-nmfm <- rast("NM_data/NM_inputs/northmt/northmt.tif", lyrs = 4)
-brfm_in <- rast("BR_data/BR_inputs/BoundaryRidge_Ind_GR1/BoundaryRidge_Ind_GR1.tif", lyrs = 4)
-brfm_fi <- rast("BR_data/BR_inputs/BoundaryRidge_Firing_GR1//BoundaryRidge_Firing_GR1.tif", lyrs = 4)
-lrfm_in <- rast("LR_data/LR_inputs/LimestoneRidge_Ind_GR1/LimestoneRidge_Ind_GR1.tif"
-                , lyrs = 4)
-lrfm_fi <- rast("LR_data/LR_inputs/LimestoneRidge_Firing_GR1/LimestoneRidge_Firing_GR1.tif",
-                lyrs = 4)
-mlfm_in <- rast("ML_data/ML_inputs/Mtlowe_Ind_GR1/Mtlowe_Ind_GR1.tif", lyrs = 4)
-mlfm_fi <- rast("ML_data/ML_inputs/Mtlowe_Firing_GR1/Mtlowe_Firing_GR1.tif", lyrs = 4)
-nmfm_in <- rast("NM_data/NM_inputs/Northmt_Ind_GR1/Northmt_Ind_GR1.tif", lyrs = 4)
-nmfm_fi <- rast("NM_data/NM_inputs/Northmt_Firing_GR1/Northmt_Firing_GR1.tif", lyrs = 4)
+#Import fuel model input from fire modeling run
+#You will need to import one for each landscape and it must have the same first
+#two letters as your FLP file
+fm <- rast("BR_data/BR_inputs/boundaryridge/boundaryridge.tif", lyrs = 4)
+
 
 ##Calculate Hazard Weights
 
@@ -74,7 +60,9 @@ predicted_weights <- data.frame(FIL, weights)
 #Function to create weighted CFL rasters by including weight derived from a population model (above)
 #and with each FIL multiplied by burn likelihood at each cell
 make_UWR_rasters <- function(x){
-  setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Flammap/FLP_files/")
+  
+  #Set working directoy to location of your FLP files
+  setwd("")
   #ReadCSV
   df <- read.csv(x)
   #Create CFL Column, rename columns to intervals
@@ -137,16 +125,16 @@ make_UWR_rasters <- function(x){
   # Get the current raster extent
   b_ext <- ext(b)
   
-  # Define a different inward crop distance for LR landscape to decrease differences in area treated between landscapes
-  crop_x <- ifelse(str_detect(x, "LR"), 7500, 2000)
-  crop_ymin <- ifelse(str_detect(x, "LR"), 8500, 2000)
-  crop_ymax <- ifelse(str_detect(x, "LR"), 4500, 2000)
+  #Define the inward buffer distance for your landscape in meters
+  #You can leave this blank if you don't want to buffer
+  crop_x <- 
+  crop_y <- 
   
   # Compute the new extent by reducing 2 km from all sides
   new_extent <- ext(b_ext[1] + crop_x,  # New xmin
                     b_ext[2] - crop_x,  # New xmax
-                    b_ext[3] + crop_ymin,  # New ymin
-                    b_ext[4] - crop_ymax)
+                    b_ext[3] + crop_y,  # New ymin
+                    b_ext[4] - crop_y)
   
   # Crop the raster to the new extent
   b <- crop(b, new_extent)
@@ -154,11 +142,12 @@ make_UWR_rasters <- function(x){
   #update name
   names(b) <- "UWR"
   
-  #Set wd for saving rasters
-  setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/raster/UWR/")
+  #Set wd for to location for saving UWR rasters
+  setwd("")
   
   #Changing file name inconsistency for firing landscapes
-  forpaste <- ifelse(substr(x,4,5) == "FR", paste0(substr(x,1,3), "FI_"), substr(x,1,6))
+  #insert text into quotations to assign your file a name
+  forpaste <- ""
   
   #Saving rasters and assignting to the environment
   terra::writeRaster(b, filename=paste0(forpaste, "UWR.tif"), 
@@ -167,7 +156,8 @@ make_UWR_rasters <- function(x){
 }
 
 #Run function on all FLP csvs
-UWR_csvs <- list.files(path = "C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Flammap/FLP_files/", pattern = ".csv")
+#Set the empty string next to path as the location of your FLP csv files
+UWR_csvs <- list.files(path = "", pattern = ".csv")
 lapply(UWR_csvs, make_UWR_rasters)
 
 #Clear environment

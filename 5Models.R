@@ -203,7 +203,7 @@ r2(MLmodelallvars)
 
 
 #Save models
-setwd("C:/Users/swanj/Documents/Research/fuel_break_systems/Models/")
+setwd("C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/Outputs/models/")
 saveRDS(LRmodelallvars, "LRmodel_forpaper.rds")
 saveRDS(BRmodelallvars, "BRmodel_forpaper.rds")
 saveRDS(MLmodelallvars, "MLmodel_forpaper.rds")

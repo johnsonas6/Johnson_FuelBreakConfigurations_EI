@@ -1,4 +1,4 @@
-setwd('C:/Users/swanj/Documents/Research/Fuel_Breaks/Fuel_Break_Spatial_Analysis/arc_fb_analysis/NED_data/')
+setwd('C:/Users/swanj/Documents/Johnsonetal2026_FuelBreaks_UWR/DEMs/')
 
 #import DEMs
 r1 <- rast("USGS_1_n34w117_20190924.tif")
