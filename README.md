@@ -2,6 +2,8 @@
 
 Analytical code for Johnson et al. 2026 "Configuration of fuel break networks influence landscape-level fire-risk in California"
 
+Data available on Zenodo: https://doi.org/10.5281/zenodo.18422834
+
 Run Scripts in number order to recreate results. File paths to files downloadable from Zenodo are below scripts:
 
 
